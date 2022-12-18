@@ -7,8 +7,8 @@ return require('packer').startup(function(use)
     use 'NvChad/nvim-colorizer.lua'
     --      use {"echasnovski/mini.nvim" branch "stable" }
     use {
-        'akinsho/bufferline.nvim', 
-        tag = "v3.*", 
+        'akinsho/bufferline.nvim',
+        tag = "v3.*",
         requires = 'nvim-tree/nvim-web-devicons',
         config = function() require("bufferline").setup{} end
     }
@@ -20,7 +20,13 @@ return require('packer').startup(function(use)
         'j-hui/fidget.nvim',
         config = function() require('fidget').setup({}) end
     }
-
+    use {
+        'saecki/crates.nvim',
+        requires = { 'nvim-lua/plenary.nvim' },
+        config = function()
+            require('crates').setup()
+        end,
+    }
     use {
         'numToStr/Comment.nvim',
         config = function() require('Comment').setup() end
@@ -36,12 +42,18 @@ return require('packer').startup(function(use)
     }
 
     use 'nvim-treesitter/nvim-treesitter'
+    use 'nvim-treesitter/nvim-treesitter-textobjects'
+
+    use({
+        "kylechui/nvim-surround",
+        tag = "*",
+        config = function() require("nvim-surround").setup({}) end
+    })
 
     use {
         'stevearc/dressing.nvim',
         config = function() require('dressing').setup() end
     }
-
 
     -- LSP
     use {
@@ -64,6 +76,18 @@ return require('packer').startup(function(use)
         {'L3MON4D3/LuaSnip'},
         {'rafamadriz/friendly-snippets'},
       }
+    }
+
+    use {
+        "folke/trouble.nvim",
+        requires = "kyazdani42/nvim-web-devicons",
+        config = function()
+            require("trouble").setup {
+                -- your configuration comes here
+                -- or leave it empty to use the default settings
+                -- refer to the configuration section below
+            }
+        end
     }
     -- ColorScheme
     use 'mhartington/oceanic-next'

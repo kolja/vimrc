@@ -103,8 +103,10 @@ vim.keymap.set( 'v', '<leader>s', ':s/\\v')
 -- TODO: vim.keymap.set( 'n', '<leader>S', starter.open {silent = true})
 
 -- move blocks of text in visual mode
-vim.keymap.set( 'v', '<up>',   'xkP`[V`]')
-vim.keymap.set( 'v', '<down>', 'xp`[V`]')
+-- vim.keymap.set( 'v', '<up>',   'xkP`[V`]')
+-- vim.keymap.set( 'v', '<down>', 'xp`[V`]')
+vim.keymap.set('v', '<down>', ':m \'>+1<CR>gv=gv')
+vim.keymap.set('v', '<up>', ':m \'<-2<CR>gv=gv')
 
 -- leader-d to remove a selection -- somehow reminds me of cmd-d in Photoshop
 vim.keymap.set( 'n', '<leader>d', ':nohlsearch<cr>:echom \'\'<cr>', {silent = true})
