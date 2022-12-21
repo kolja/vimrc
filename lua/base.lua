@@ -52,6 +52,7 @@ vim.o.lazyredraw = false
 
 vim.o.showmode = false
 
+vim.o.laststatus = 3
 
 -- vim.o.guifont = "FiraCode-Regular:h11"
 vim.o.background = "dark"

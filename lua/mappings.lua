@@ -13,12 +13,12 @@
 
 vim.keymap.set( 'n', '<leader><leader>s', '<cmd>source ~/.vim/lua/plug/luasnip.lua<CR>')
 
-vim.keymap.set( 'n', '<leader>l', function () vim.o.list = not vim.o.list end, 
+vim.keymap.set( 'n', '<leader>l', function () vim.o.list = not vim.o.list end,
                                     {desc = 'toggle list chars'})
 
 vim.keymap.set( 'n', '<leader>L', ':5TermExec cmd=\'lg\' direction=float<cr>')
 
-vim.keymap.set( 'n', '<leader>t', function () print(os.date '%H:%M') end, 
+vim.keymap.set( 'n', '<leader>t', function () print(os.date '%H:%M') end,
                                     {desc = 'show time in statusline'})
 
 vim.keymap.set( 'n', '<leader>n', function () vim.o.number = not vim.o.number end,
@@ -103,8 +103,6 @@ vim.keymap.set( 'v', '<leader>s', ':s/\\v')
 -- TODO: vim.keymap.set( 'n', '<leader>S', starter.open {silent = true})
 
 -- move blocks of text in visual mode
--- vim.keymap.set( 'v', '<up>',   'xkP`[V`]')
--- vim.keymap.set( 'v', '<down>', 'xp`[V`]')
 vim.keymap.set('v', '<down>', ':m \'>+1<CR>gv=gv')
 vim.keymap.set('v', '<up>', ':m \'<-2<CR>gv=gv')
 
@@ -116,6 +114,10 @@ vim.keymap.set( 'v', '<C-q>', '<esc>\'<<C-q>\'>$')
 
 -- always use 'very magic' regexes
 vim.keymap.set( 'n', '/', '/\\v')
+
+-- show lsp-diagnostic errors (for that line) in a floating window:
+vim.keymap.set( 'n', '<leader>e', vim.diagnostic.open_float, {silent = true})
+vim.keymap.set( 'n', '<leader>E', ':TroubleToggle<CR>', {silent = true})
 
 
 -- remove whitespace from line endings, preserver cursor posistion
