@@ -66,14 +66,23 @@ vim.cmd('colorscheme OceanicNext')
 -- ------ Autocommands ----------
 -- ------ :help lua-autocmd -----
 
--- (local group (vim.api.nvim_create_augroup "the_group" {:clear false})
+local group = vim.api.nvim_create_augroup("the_group", {clear = false})
 
--- (vim.api.nvim_create_autocmd [:TextYankPost] {
---  :group group
---  :callback (fn [] (vim.highlight.on_yank {
---                   :higroup "IncSearch"
---                   :timeout 300}))}
+vim.api.nvim_create_autocmd( "TextYankPost", {
+    group = group,
+    callback = function() 
+        vim.highlight.on_yank( {
+            higroup = "IncSearch",
+            timeout = 300
+        })
+    end
+})
 
+vim.api.nvim_create_autocmd("FileType", {
+    group = group,
+    pattern = "uss",
+    command = "set ft=css"
+})
 ------------- hide statusline for Startify -------------
 
 -- (vim.api.nvim_create_autocmd [:FileType] {

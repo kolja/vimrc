@@ -47,10 +47,10 @@ vim.keymap.set( 'n', 'k', 'gk', {desc = 'navigate wrapped lines the same way you
 vim.keymap.set( 'i', '¬', '<C-K>*l')
 
 -- navigate buffers: cmd-shift-l = ƒ  cmd-shift-h = ∂
-vim.keymap.set( 'n', 'ƒ', '<cmd>bn<cr>')
-vim.keymap.set( 'n', '∂', '<cmd>bp<cr>')
-vim.keymap.set( 'n', 'ƒ', '<esc><cmd>bn<cr>')
-vim.keymap.set( 'n', '∂', '<esc><cmd>bp<cr>')
+vim.keymap.set( {'n', 'i'}, 'ƒ', '<cmd>bn<cr>')
+vim.keymap.set( {'n', 'i'},'∂', '<cmd>bp<cr>')
+-- vim.keymap.set( 'i', 'ƒ', '<esc><cmd>bn<cr>')
+-- vim.keymap.set( 'i', '∂', '<esc><cmd>bp<cr>')
 
 vim.keymap.set( 't', 'ƒ', '<C-\\><C-n>:bn<CR>')
 vim.keymap.set( 't', '∂', '<C-\\><C-n>:bp<CR>')

@@ -93,9 +93,11 @@ return require('packer').startup(function(use)
     --     end,
     -- })
     use {
-        "folke/trouble.nvim",
-        requires = "kyazdani42/nvim-web-devicons"
+        'folke/trouble.nvim',
+        requires = 'kyazdani42/nvim-web-devicons'
     }
+    -- TODO: Checkout lsp_signature
+    -- use 'ray-x/lsp_signature.nvim'
 
     -- ColorScheme
     use 'mhartington/oceanic-next'
