@@ -24,7 +24,16 @@ vim.keymap.set( 'n', '<leader>t', function () print(os.date '%H:%M') end,
 vim.keymap.set( 'n', '<leader>n', function () vim.o.number = not vim.o.number end,
                                     {desc = 'toggle line numbers'})
 
-vim.api.nvim_create_user_command( 'Vimrc', require('plug.telescope').vimrc, {desc = 'open Vimrc Files'})
+vim.api.nvim_create_user_command( 'Vimrc',
+    function ()
+        require('telescope.builtin').find_files({ -- file_browser, live_grep, git_files    
+            prompt_title = 'Vimrc Config',
+            file_ignore_patterns = {'UltiSnips/*.*', 'plugin/packer_compiled.lua'},
+            cwd = '~/.config/nvim/'
+        })
+    end,
+    {desc = 'open Vimrc Files'}
+)
 
 -- (defn browse-opds [port]
 --   ((. telescope :extensions :opds :browse)
