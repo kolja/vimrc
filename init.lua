@@ -8,9 +8,6 @@ require('lazy').setup('plugins')
 -- keymappings
 require('mappings')
 
--- plugin setup
-require('plug.lsp')
-
 require('colorscheme')
 
 -- neovide specific

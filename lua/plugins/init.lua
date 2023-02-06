@@ -47,20 +47,6 @@ return {
     --     config = function() require('dressing').setup() end
     -- }
 
-    -- LSP Support
-    {
-        'williamboman/mason.nvim',
-        config = true
-    },
-    {
-        'williamboman/mason-lspconfig.nvim',
-        opts = {
-            ensure_installed = { "sumneko_lua", "rust_analyzer", "omnisharp_mono" }
-        }
-    },
-
-    'neovim/nvim-lspconfig',
-
     -- LSP Autocompletion
     'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-path',
