@@ -47,13 +47,18 @@ return {
     --     config = function() require('dressing').setup() end
     -- }
 
-    -- LSP ---
     -- LSP Support
     {
         'williamboman/mason.nvim',
         config = true
     },
-    'williamboman/mason-lspconfig.nvim',
+    {
+        'williamboman/mason-lspconfig.nvim',
+        opts = {
+            ensure_installed = { "sumneko_lua", "rust_analyzer", "omnisharp_mono" }
+        }
+    },
+
     'neovim/nvim-lspconfig',
 
     -- LSP Autocompletion
@@ -70,20 +75,15 @@ return {
     'onsails/lspkind.nvim',
 
     -- LSP Snippets
-    'L3MON4D3/LuaSnip',
-    'rafamadriz/friendly-snippets',
-    -- {
-    --     "glepnir/lspsaga.nvim",
-    --     branch = "main",
-    --     config = function()
-    --         require("lspsaga").init_lsp_saga({
-    --             -- error_sign = '', -- 
-    --             -- warn_sign = '',
-    --             -- hint_sign = '',
-    --             info_sign = '',
-    --         })
-    --     end,
-    -- },
+    {
+        'L3MON4D3/LuaSnip',
+        dependencies = {'rafamadriz/friendly-snippets'},
+        config = function ()
+            require("luasnip.loaders.from_vscode").load({
+                paths = {"~/.local/share/nvim/site/pack/packer/start/friendly-snippets"}
+            })
+        end
+    },
 
     -- TODO: Checkout lsp_signature
     -- 'ray-x/lsp_signature.nvim',

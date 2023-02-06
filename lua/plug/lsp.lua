@@ -1,11 +1,3 @@
-require("mason").setup()
-require("mason-lspconfig").setup({
-    ensure_installed = { "sumneko_lua", "rust_analyzer", "omnisharp_mono" }
-})
-
-require("luasnip.loaders.from_vscode").load({
-    paths = {"~/.local/share/nvim/site/pack/packer/start/friendly-snippets"}
-})
 
 local lspconfig = require('lspconfig')
 
@@ -115,7 +107,6 @@ lspconfig.rust_analyzer.setup {
     settings = {
       ["rust-analyzer"] = {}
     }
-
 }
 
 -- local pid = tostring(vim.fn.getpid());
