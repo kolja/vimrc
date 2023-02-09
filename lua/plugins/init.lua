@@ -4,7 +4,7 @@ return {
     "kyazdani42/nvim-web-devicons",
     'NvChad/nvim-colorizer.lua',
 
-    -- {"echasnovski/mini.nvim", branch = "stable" }
+    -- {"echasnovski/mini.nvim", version = false}
 
     {
         'akinsho/bufferline.nvim',
