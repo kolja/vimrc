@@ -4,8 +4,19 @@ local has_words_before = function()
 end
 
 return {
+
     'hrsh7th/nvim-cmp',
-    dependencies = {'L3MON4D3/LuaSnip', 'onsails/lspkind.nvim'},
+
+    dependencies = {
+        'L3MON4D3/LuaSnip',
+        'hrsh7th/cmp-buffer',
+        'hrsh7th/cmp-path',
+        'hrsh7th/cmp-nvim-lsp',
+        'hrsh7th/cmp-nvim-lua',
+        'saadparwaiz1/cmp_luasnip',
+        'onsails/lspkind.nvim',
+    },
+
     config = function ()
 
         local luasnip = require('luasnip')
@@ -33,7 +44,10 @@ return {
                 ['<C-j>'] = cmp.mapping.select_next_item(),
                 ["<C-l>"] = cmp.mapping(function(fallback)
                     if luasnip.expand_or_jumpable() then
+                        print("foo")
                         luasnip.expand_or_jump()
+                    elseif cmp.visible() then
+                        cmp.select_next_item()
                     elseif has_words_before() then
                         cmp.complete()
                     else
@@ -49,7 +63,10 @@ return {
                         fallback()
                     end
                 end, { "i", "s" }),
-                ['<CR>'] = cmp.mapping.confirm({ select = true }),
+                ['<CR>'] = cmp.mapping.confirm({
+                    behaviour = cmp.ConfirmBehavior.Replace,
+                    select = true
+                }),
                 ["<C-Space>"] = cmp.mapping.complete(),
                 ["<ESC>"] = cmp.mapping({
                     i = (function()
@@ -62,9 +79,9 @@ return {
             sources = cmp.config.sources({
                 { name = 'nvim_lsp' },
                 { name = 'luasnip' },
-            }, {
-                    { name = 'buffer' },
-                }),
+                { name = 'buffer' },
+                { name = 'path' },
+            }),
             formatting = {
                 format = lspkind.cmp_format({
                     mode = "symbol_text",

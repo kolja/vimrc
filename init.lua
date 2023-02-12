@@ -5,9 +5,8 @@ require('base')
 -- initialize packer and plugins
 require('lazy').setup('plugins')
 
--- keymappings
 require('mappings')
-
+require('autocommand')
 require('colorscheme')
 
 -- neovide specific

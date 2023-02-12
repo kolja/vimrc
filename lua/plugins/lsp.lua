@@ -1,4 +1,3 @@
-
 local provider = {
     full = vim.empty_dict(),
     legend = {
@@ -75,11 +74,14 @@ local provider = {
 }
 
 local on_attach = function(client, bufnr)
-    local opts = {buffer = bufnr, remap = false}
+    local opts = { buffer = bufnr, remap = false }
 
+    vim.keymap.set("n", "gD", function() vim.lsp.buf.declaration() end, opts)
     vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
+    vim.keymap.set("n", "gi", function() vim.lsp.buf.implementation() end, opts)
     vim.keymap.set("i", "<C-i>", function() vim.lsp.buf.hover() end, opts)
     vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
+    vim.keymap.set("i", "<C-k>", function() vim.lsp.buf.signature_help() end, opts)
     vim.keymap.set("n", "<leader>w", function() vim.lsp.buf.workspace_symbol() end, opts)
     vim.keymap.set("n", "<leader>D", function() vim.diagnostic.open_float() end, opts)
     vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
@@ -88,7 +90,6 @@ local on_attach = function(client, bufnr)
     vim.keymap.set("n", "<leader>R", function() vim.lsp.buf.references() end, opts)
     vim.keymap.set("n", "<leader>r", function() vim.lsp.buf.rename() end, opts)
     vim.keymap.set("n", "==", function() vim.lsp.buf.format() end, opts)
-    vim.keymap.set("i", "<leader>S", function() vim.lsp.buf.signature_help() end, opts)
 
     -- Hacky workaround. Hopefully remove soon.
     if client.name == "omnisharp" then
@@ -120,7 +121,7 @@ return {
             'hrsh7th/cmp-nvim-lsp'
         },
 
-        config = function ()
+        config = function()
             local lspconfig = require('lspconfig')
             require("mason-lspconfig").setup({
                 ensure_installed = ensure_installed

@@ -1,10 +1,8 @@
 
 return {
 
-    "kyazdani42/nvim-web-devicons",
+    'kyazdani42/nvim-web-devicons',
     'NvChad/nvim-colorizer.lua',
-
-    -- {"echasnovski/mini.nvim", version = false}
 
     {
         'akinsho/bufferline.nvim',
@@ -14,10 +12,12 @@ return {
     },
     {
         'j-hui/fidget.nvim',
+        ft = {'lua', 'rust', 'cs'},
         config = true
     },
     {
         'saecki/crates.nvim',
+        ft = 'rust',
         dependencies = { 'nvim-lua/plenary.nvim',
                      'jose-elias-alvarez/null-ls.nvim' },
         config = true
@@ -33,6 +33,7 @@ return {
     },
     {
         'nvim-telescope/telescope.nvim',
+        cmd = 'Telescope',
         version = '*',
         dependencies = {{'nvim-lua/plenary.nvim'}}
     },
@@ -41,34 +42,6 @@ return {
         "kylechui/nvim-surround",
         config = true
     },
-
-    -- use {
-    --     'stevearc/dressing.nvim',
-    --     config = function() require('dressing').setup() end
-    -- }
-
-    -- LSP Autocompletion
-    'hrsh7th/cmp-buffer',
-    'hrsh7th/cmp-path',
-    'saadparwaiz1/cmp_luasnip',
-    'hrsh7th/cmp-nvim-lsp',
-    'hrsh7th/cmp-nvim-lua',
-
-    'onsails/lspkind.nvim',
-
-    -- LSP Snippets
-    {
-        'L3MON4D3/LuaSnip',
-        dependencies = {'rafamadriz/friendly-snippets'},
-        config = function ()
-            require("luasnip.loaders.from_vscode").load({
-                paths = {"~/.local/share/nvim/site/pack/packer/start/friendly-snippets"}
-            })
-        end
-    },
-
-    -- TODO: Checkout lsp_signature
-    -- 'ray-x/lsp_signature.nvim',
 
     -- ColorScheme
 

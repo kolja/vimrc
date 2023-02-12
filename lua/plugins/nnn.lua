@@ -1,5 +1,6 @@
 return {
     'luukvbaal/nnn.nvim',
+    cmd = 'NnnPicker',
     opts = {
         command = "NNN_OPTS=\"\" nnn -R",
         set_default_mappings = false,
