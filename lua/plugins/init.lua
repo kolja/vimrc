@@ -2,8 +2,11 @@
 return {
 
     'kyazdani42/nvim-web-devicons',
-    'NvChad/nvim-colorizer.lua',
-
+    {
+        'NvChad/nvim-colorizer.lua',
+        version = '*',
+        config = true
+    },
     {
         'akinsho/bufferline.nvim',
         version = '*',
@@ -43,6 +46,15 @@ return {
         config = true
     },
 
+    {
+        "ggandor/leap.nvim",
+        dependencies = "tpope/vim-repeat",
+        keys = {'S','s'},
+        config = function ()
+            require('leap').add_default_mappings()
+            vim.keymap.del('x', 'x') -- I want to keep 'x' for deleting stuff in visual mode
+        end
+    },
     -- ColorScheme
 
     {'mhartington/oceanic-next', lazy = true},
