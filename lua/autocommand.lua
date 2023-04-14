@@ -11,11 +11,17 @@ vim.api.nvim_create_autocmd("BufWritePre, FileWritePre", {
     end
 })
 
+-- vim.api.nvim_create_autocmd("BufRead,BufNewFile", {
+--     group = group,
+--     pattern = "rem",
+--     command = "set ft=rc"
+-- })
+
 -- Highlight on Yank
 vim.api.nvim_create_autocmd( "TextYankPost", {
     group = group,
     callback = function()
-        vim.highlight.on_yank( {
+        vim.highlight.on_yank({
             higroup = "IncSearch",
             timeout = 300
         })

@@ -74,12 +74,13 @@ local provider = {
 }
 
 local on_attach = function(client, bufnr)
+
     local opts = { buffer = bufnr, remap = false }
 
     vim.keymap.set("n", "gD", function() vim.lsp.buf.declaration() end, opts)
     vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
     vim.keymap.set("n", "gi", function() vim.lsp.buf.implementation() end, opts)
-    vim.keymap.set("i", "<C-i>", function() vim.lsp.buf.hover() end, opts)
+    -- vim.keymap.set("i", "<C-i>", function() vim.lsp.buf.hover() end, opts) -- messes with tab somehow
     vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
     vim.keymap.set("i", "<C-k>", function() vim.lsp.buf.signature_help() end, opts)
     vim.keymap.set("n", "<leader>w", function() vim.lsp.buf.workspace_symbol() end, opts)
@@ -97,7 +98,7 @@ local on_attach = function(client, bufnr)
     end
 end
 
-local ensure_installed = { "sumneko_lua", "rust_analyzer", "omnisharp_mono" }
+local ensure_installed = { "lua_ls", "rust_analyzer", "omnisharp_mono" }
 
 return {
 
@@ -151,7 +152,7 @@ return {
             table.insert(runtime_path, "lua/?.lua")
             table.insert(runtime_path, "lua/?/init.lua")
 
-            lspconfig['sumneko_lua'].setup({
+            lspconfig['lua_ls'].setup({
                 on_attach = on_attach,
                 capabilities = capabilities,
                 settings = {

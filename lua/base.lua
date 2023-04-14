@@ -56,16 +56,9 @@ vim.o.laststatus = 3
 
 vim.o.background = "dark"
 
--------------- Repl-Alliance --------------
+-------------- bootstrap Lazy.nvim --------------
+--
 
---(vim.api.nvim_create_autocmd [:FileType]
---     :group group
---     :pattern "clojure"
---     :callback (fn []  (global repl (require "srepl")
---                       (repl:connect))
-
-
--- bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -78,4 +71,17 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
+
+-------------- Repl-Alliance --------------
+
+--(vim.api.nvim_create_autocmd [:FileType]
+--     :group group
+--     :pattern "clojure"
+--     :callback (fn []  (global repl (require "srepl")
+--                       (repl:connect))
+
+
+
+
+
 
