@@ -49,7 +49,7 @@ vim.api.nvim_create_user_command('Rem',
     function()
         require('telescope.builtin').find_files({
             prompt_title = 'Remind',
-            cwd = '~/.config/remind/'
+            cwd = '~/Documents/notes/remind/'
         })
     end,
     { desc = 'open remind config' }
