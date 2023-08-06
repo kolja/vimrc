@@ -98,7 +98,7 @@ local on_attach = function(client, bufnr)
     end
 end
 
-local ensure_installed = { "lua_ls", "rust_analyzer", "omnisharp_mono" }
+local ensure_installed = { "lua_ls", "tsserver", "rust_analyzer", "omnisharp_mono" }
 
 return {
 
@@ -139,14 +139,47 @@ return {
                 }
             }
 
-            lspconfig['omnisharp_mono'].setup({
-                -- cmd = {bin, '-lsp', '-hpid', pid},
+            lspconfig.tsserver.setup {
+                on_attach = on_attach
+            }
+
+            lspconfig.tailwindcss.setup {}
+
+            lspconfig.emmet_ls.setup({
+              -- on_attach = on_attach,
+              capabilities = capabilities,
+              filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "vue" },
+              init_options = {
+                html = {
+                  options = {
+                    -- For possible options, see: https://github.com/emmetio/emmet/blob/master/src/config.ts#L79-L267
+                    -- ["bem.enabled"] = true,
+                  },
+                },
+              }
+            })
+            -- local omnisharp_bin = "/users/kolja/.local/share/nvim/mason/packages/omnisharp-mono/omnisharp/omnisharp.exe"
+            -- local omnisharp_bin = "/opt/homebrew/cellar/omnisharp-mono/1.35.3/libexec/omnisharp.exe"
+            -- local mono = "/opt/homebrew/bin/mono"
+            -- local pid = vim.fn.getpid()
+
+            lspconfig.omnisharp.setup {
+                -- cmd = {mono, omnisharp_bin, "--languageserver", "--hostpid", tostring(pid)},
                 -- filetypes = {'cs'},
                 use_mono = true,
                 capabilities = capabilities,
                 root_dir = lspconfig.util.root_pattern("*.csproj", "*.sln"),
-                on_attach = on_attach
-            })
+                on_attach = on_attach,
+            }
+
+            -- lspconfig.omnisharp_mono.setup {
+            --     -- cmd = {bin, '-lsp', '-hpid', pid},
+            --     -- filetypes = {'cs'},
+            --     use_mono = true,
+            --     capabilities = capabilities,
+            --     root_dir = lspconfig.util.root_pattern("*.csproj", "*.sln"),
+            --     on_attach = on_attach
+            -- }
 
             local runtime_path = vim.split(package.path, ";")
             table.insert(runtime_path, "lua/?.lua")

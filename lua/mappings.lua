@@ -32,6 +32,7 @@ vim.api.nvim_create_user_command('Vimrc',
     end,
     { desc = 'open Vimrc Files' }
 )
+vim.keymap.set('n', '<leader>V', ':Vimrc<cr>' ,{ silent = true, desc = 'toggle line numbers' })
 
 -------------- Open Notes -----------
 vim.api.nvim_create_user_command('Notes',
@@ -94,8 +95,8 @@ vim.keymap.set('n', 'k', 'gk', { desc = 'navigate wrapped lines the same way you
 vim.keymap.set('i', '¬', '<C-K>*l')
 
 -- navigate buffers: cmd-shift-l = ƒ  cmd-shift-h = ∂
-vim.keymap.set({ 'n', 'i' }, 'ƒ', '<cmd>bn<cr>')
-vim.keymap.set({ 'n', 'i' }, '∂', '<cmd>bp<cr>')
+vim.keymap.set({ 'n', 'i' }, '<F9>', '<cmd>bn<cr>')
+vim.keymap.set({ 'n', 'i' }, '<F7>', '<cmd>bp<cr>')
 -- vim.keymap.set( 'i', 'ƒ', '<esc><cmd>bn<cr>')
 -- vim.keymap.set( 'i', '∂', '<esc><cmd>bp<cr>')
 
