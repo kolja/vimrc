@@ -85,14 +85,20 @@ return {
     "Olical/conjure"
   },
   {
-    "guns/vim-sexp",
+{
+  "julienvincent/nvim-paredit",
+  config = true
+}
   },
-  {
-    "tpope/vim-repeat"
-  },
-  {
-    "tpope/vim-sexp-mappings-for-regular-people",
-  },
+  -- {
+  --   "guns/vim-sexp",
+  -- },
+  -- {
+  --   "tpope/vim-repeat"
+  -- },
+  -- {
+  --   "tpope/vim-sexp-mappings-for-regular-people",
+  -- },
 
   -- ColorScheme
   {
