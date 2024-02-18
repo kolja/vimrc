@@ -172,6 +172,11 @@ return {
                 on_attach = on_attach,
             }
 
+            lspconfig.ruff_lsp.setup {
+                capabilities = capabilities,
+                on_attach = on_attach,
+            }
+
             -- lspconfig.omnisharp_mono.setup {
             --     -- cmd = {bin, '-lsp', '-hpid', pid},
             --     -- filetypes = {'cs'},

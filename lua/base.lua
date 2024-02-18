@@ -14,6 +14,8 @@ vim.o.smarttab = true
 vim.o.expandtab = true
 vim.o.autoindent = true
 
+vim.o.conceallevel = 1 -- obsidian.nvim requires it to be > 0
+
 vim.o.pumblend = 20 -- make pop-up-menu transparent
 
 vim.o.colorcolumn = "81" -- reminder when line gets too long

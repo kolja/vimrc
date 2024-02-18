@@ -95,31 +95,31 @@ vim.keymap.set('n', 'k', 'gk', { desc = 'navigate wrapped lines the same way you
 vim.keymap.set('i', '¬', '<C-K>*l')
 
 -- navigate buffers: cmd-shift-l = ƒ  cmd-shift-h = ∂
+vim.keymap.set({ 'n', 'i' }, '<F6>', '<cmd>bp<cr>')
 vim.keymap.set({ 'n', 'i' }, '<F9>', '<cmd>bn<cr>')
-vim.keymap.set({ 'n', 'i' }, '<F7>', '<cmd>bp<cr>')
--- vim.keymap.set( 'i', 'ƒ', '<esc><cmd>bn<cr>')
--- vim.keymap.set( 'i', '∂', '<esc><cmd>bp<cr>')
 
-vim.keymap.set('t', 'ƒ', '<C-\\><C-n>:bn<CR>')
-vim.keymap.set('t', '∂', '<C-\\><C-n>:bp<CR>')
+vim.keymap.set('t', '<F6>', '<C-\\><C-n>:bp<CR>')
+vim.keymap.set('t', '<F9>', '<C-\\><C-n>:bn<CR>')
 vim.keymap.set('t', '<esc>', '<C-\\><C-n>')
 
--- create split windows intuitively
-vim.keymap.set('n', '<C-right>', ':set splitright<bar>:vnew<cr>')
-vim.keymap.set('n', '<C-left>', ':set nosplitright<bar>:vnew<cr>')
-vim.keymap.set('n', '<C-up>', ':set nosplitbelow<bar>:new<cr>')
-vim.keymap.set('n', '<C-down>', ':set splitbelow<bar>:new<cr>')
+-- create split windows intuitively (Colemak style)
+vim.keymap.set('n', '<C-m>', ':set nosplitright<bar>:vnew<cr>')
+vim.keymap.set('n', '<C-n>', ':set splitbelow<bar>:new<cr>')
+vim.keymap.set('n', '<C-e>', ':set nosplitbelow<bar>:new<cr>')
+vim.keymap.set('n', '<C-i>', ':set splitright<bar>:vnew<cr>')
+
+vim.keymap.set('n', '<C-H>', ':set nosplitright<bar>:vnew<cr>')
 
 -- smoothly move beteen windows
-vim.keymap.set('n', '<C-j>', '<C-W>j')
-vim.keymap.set('n', '<C-k>', '<C-W>k')
-vim.keymap.set('n', '<C-h>', '<C-W>h')
-vim.keymap.set('n', '<C-l>', '<C-W>l')
+vim.keymap.set('n', '<C-left>', '<C-W>h')
+vim.keymap.set('n', '<C-down>', '<C-W>j')
+vim.keymap.set('n', '<C-up>', '<C-W>k')
+vim.keymap.set('n', '<C-right>', '<C-W>l')
 
-vim.keymap.set('t', '<C-j>', '<C-\\><C-n><C-W>j')
-vim.keymap.set('t', '<C-k>', '<C-\\><C-n><C-W>k')
-vim.keymap.set('t', '<C-h>', '<C-\\><C-n><C-W>h')
-vim.keymap.set('t', '<C-l>', '<C-\\><C-n><C-W>l')
+vim.keymap.set('t', '<C-m>', '<C-\\><C-n><C-W>h')
+vim.keymap.set('t', '<C-n>', '<C-\\><C-n><C-W>j')
+vim.keymap.set('t', '<C-e>', '<C-\\><C-n><C-W>k')
+vim.keymap.set('t', '<C-i>', '<C-\\><C-n><C-W>l')
 
 -- Save and run on the commandline
 -- vim.keymap.set( 'n', '<leader>r', ':w<cr> <bar> :!%:p<cr>')
@@ -167,7 +167,7 @@ vim.keymap.set('n', '/', '/\\v')
 vim.keymap.set('n', 'T', function()
     require("FTerm").scratch(
         {
-            cmd = { '/Users/kolja/dev/loriini/target/debug/loriini', '-s', '18', '-r', '9' },
+            cmd = { '/Users/kolja/dev/loriini/target/release/loriini', '-s', '18', '-r', '9' },
             dimensions = {
                 height = 0.40,
                 width = 0.30,
@@ -182,15 +182,14 @@ vim.keymap.set('n', 'T', function()
         })
 end)
 
+
 vim.keymap.set('n', '<leader>x', function()
-    local toggle = { '- [ ]', '- [x]' }
-    local i = 1
-    vim.api.nvim_substitute({
-        range = { vim.api.nvim_win_get_cursor(0)[1] - 1, vim.api.nvim_win_get_cursor(0)[1] },
-        pattern = '- [ ]',
-        replacement = toggle[i],
-        flags = 'c'
-    })
+  local current_line = vim.api.nvim_get_current_line()
+  local new_line = string.gsub(current_line, "%- %[(.)%]",
+    function(check)
+      return check == ' ' and "- [x]" or "- [ ]"
+    end)
+  vim.api.nvim_set_current_line(new_line)
 end)
 -- remove whitespace from line endings, preserver cursor posistion
 -- TODO: vim.keymap.set( 'n', :<leader><space>, [[:call Preserve('%s/\s\+$//e')<cr>]])

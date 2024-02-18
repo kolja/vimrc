@@ -25,6 +25,10 @@ return {
     config = true
   },
   {
+   'karb94/neoscroll.nvim',
+    config = true
+  },
+  {
     'numToStr/Comment.nvim',
     config = true
   },
@@ -59,36 +63,36 @@ return {
       vim.keymap.del('x', 'x') -- I want to keep 'x' for deleting stuff in visual mode
     end
   },
-  {
-    'mhartington/formatter.nvim',
-    config = function()
-      local formatter_prettier = { require('formatter.defaults.prettier') }
-      require("formatter").setup({
-        filetype = {
-          javascript      = formatter_prettier,
-          javascriptreact = formatter_prettier,
-          typescript      = formatter_prettier,
-          typescriptreact = formatter_prettier,
-        }
-      })
-      -- automatically format buffer before writing to disk:
-      vim.api.nvim_create_augroup('BufWritePreFormatter', {})
-      vim.api.nvim_create_autocmd('BufWritePre', {
-        command = 'FormatWrite',
-        group = 'BufWritePreFormatter',
-        pattern = { '*.js', '*.jsx', '*.ts', '*.tsx' },
-      })
-    end,
-    ft = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
-  },
+  -- {
+  --   'mhartington/formatter.nvim',
+  --   config = function()
+  --     local formatter_prettier = { require('formatter.defaults.prettier') }
+  --     require("formatter").setup({
+  --       filetype = {
+  --         javascript      = formatter_prettier,
+  --         javascriptreact = formatter_prettier,
+  --         typescript      = formatter_prettier,
+  --         typescriptreact = formatter_prettier,
+  --       }
+  --     })
+  --     -- automatically format buffer before writing to disk:
+  --     vim.api.nvim_create_augroup('BufWritePreFormatter', {})
+  --     vim.api.nvim_create_autocmd('BufWritePre', {
+  --       command = 'FormatWrite',
+  --       group = 'BufWritePreFormatter',
+  --       pattern = { '*.js', '*.jsx', '*.ts', '*.tsx' },
+  --     })
+  --   end,
+  --   ft = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+  -- },
   {
     "Olical/conjure"
   },
   {
-{
-  "julienvincent/nvim-paredit",
-  config = true
-}
+    {
+      "julienvincent/nvim-paredit",
+      config = true
+    }
   },
   -- {
   --   "guns/vim-sexp",
@@ -106,6 +110,7 @@ return {
     ft = 'typst',
     lazy = false,
   },
+  { 'github/copilot.vim' },
   { 'mhartington/oceanic-next', lazy = true },
   { 'fenetikm/falcon',          lazy = true },
   { 'folke/tokyonight.nvim',    lazy = true },
