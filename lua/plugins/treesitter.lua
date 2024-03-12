@@ -7,6 +7,7 @@ return {
                 "fennel",
                 "javascript",
                 "typescript",
+                "vue",
                 "css",
                 "c_sharp",
                 "lua",

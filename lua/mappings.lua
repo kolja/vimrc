@@ -9,6 +9,8 @@
 --            starter mini.starter
 --            }})
 
+vim.keymap.set('n', 'tt', ':Joshuto<cr>', { desc = 'open file browser' })
+
 vim.keymap.set('n', '<leader>l', function() vim.o.list = not vim.o.list end,
     { desc = 'toggle list chars' })
 
@@ -103,12 +105,12 @@ vim.keymap.set('t', '<F9>', '<C-\\><C-n>:bn<CR>')
 vim.keymap.set('t', '<esc>', '<C-\\><C-n>')
 
 -- create split windows intuitively (Colemak style)
-vim.keymap.set('n', '<C-m>', ':set nosplitright<bar>:vnew<cr>')
+-- vim.keymap.set('n', '<C-m>', ':set nosplitright<bar>:vnew<cr>')
 vim.keymap.set('n', '<C-n>', ':set splitbelow<bar>:new<cr>')
 vim.keymap.set('n', '<C-e>', ':set nosplitbelow<bar>:new<cr>')
 vim.keymap.set('n', '<C-i>', ':set splitright<bar>:vnew<cr>')
 
-vim.keymap.set('n', '<C-H>', ':set nosplitright<bar>:vnew<cr>')
+-- vim.keymap.set('n', '<C-H>', ':set nosplitright<bar>:vnew<cr>')
 
 -- smoothly move beteen windows
 vim.keymap.set('n', '<C-left>', '<C-W>h')
@@ -129,7 +131,6 @@ vim.keymap.set('n', '<leader>g', ':Telescope live_grep<cr>')
 vim.keymap.set('n', '<leader>p', ':Telescope builtin<cr>')
 
 vim.keymap.set('n', '<leader>G', ':lua require\'gitsigns\'.toggle_signs()<cr>')
-vim.keymap.set('n', 'tt', ':NnnPicker<cr>')
 
 -- TODO: vim.keymap.set( 'n', '<leader>z', misc.toggle-zen-mode)
 
@@ -151,8 +152,8 @@ vim.keymap.set('v', '<leader>s', ':s/\\v')
 -- TODO: vim.keymap.set( 'n', '<leader>S', starter.open {silent = true})
 
 -- move blocks of text in visual mode
-vim.keymap.set('v', '<down>', ':m \'>+1<CR>gv=gv')
-vim.keymap.set('v', '<up>', ':m \'<-2<CR>gv=gv')
+vim.keymap.set('v', '-', ':m \'>+1<CR>gv=gv')
+vim.keymap.set('v', '+', ':m \'<-2<CR>gv=gv')
 
 -- leader-d to remove a selection -- somehow reminds me of cmd-d in Photoshop
 vim.keymap.set('n', '<leader>d', ':nohlsearch<cr>:echom \'\'<cr>', { silent = true })
