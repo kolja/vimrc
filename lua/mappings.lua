@@ -22,8 +22,7 @@ wk.register({
     z = { "<cmd>Telescope spell_suggest<cr>", "Spell Suggest" },
     o = { "<cmd>Telescope oldfiles<cr>", "Old Files" },
     m = { "<cmd>Telescope marks<cr>", "Marks" },
-    n = { "<cmd>Telescope file_browser<cr>", "File Browser" },
-    N = { "<cmd>Oil ~/Documents/notes<cr>", "Oil Notes" },
+    n = { "<cmd>Oil ~/Documents/notes<cr>", "Oil Notes" },
     l = { "<cmd>Telescope lsp_document_symbols<cr>", "LSP Document Symbols" },
     L = { "<cmd>Telescope lsp_workspace_symbols<cr>", "LSP Workspace Symbols" },
     d = { "<cmd>Telescope lsp_document_diagnostics<cr>", "LSP Document Diagnostics" },
@@ -35,12 +34,16 @@ wk.register({
   ["<leader>n"] = {
     name = "Notes", -- optional group name
     N = { "<cmd>Notes<cr>", "Open Notes" },
-    i = { "<cmd>Oil ~/Documents/notes/inbox<cr>", "Notes inbox" },
-    n = { "<cmd>ObsidianNew<cr>", "New Note" },
+    n = { "<cmd>Oil ~/Documents/notes/inbox<cr>", "Notes inbox" },
+    a = { "<cmd>ObsidianNew<cr>", "add Note" },
+    s = { "<cmd>ObsidianSearch<cr>", "Grep Notes" },
+    r = { "<cmd>ObsidianRename<cr>", "Rename Note" },
+    l = { "<cmd>ObsidianLinks<cr>", "Links" },
+    e = { "<cmd>ObsidianExtractNote<cr>", "Extract and Link" },
+    w = { "<cmd>ObsidianWorkspace<cr>", "change Vault" },
     o = { "<cmd>ObsidianOpen<cr>", "Open Obsidian" },
   },
 })
-
 
 vim.keymap.set('n', '<leader>L', function() vim.o.list = not vim.o.list end,
   { desc = 'toggle list chars' })

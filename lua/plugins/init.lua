@@ -109,7 +109,8 @@ return {
     opts = {
       keymaps = {
         ["q"] = "actions.close",
-        [".."] = "actions.parent",
+        ["<"] = "actions.parent",
+        [">"] = "actions.select",
         ["?"] = "actions.show_help",
       },
       preview = {
