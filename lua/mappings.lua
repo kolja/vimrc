@@ -1,80 +1,157 @@
--- (module mappings
---  {require {a aniseed.core
---            nvim aniseed.nvim
---            telescope telescope
---            ls luasnip
---            nu aniseed.nvim.util
---            pt plug.telescope
---            misc plug.misc
---            starter mini.starter
---            }})
 
-vim.keymap.set('n', 'tt', ':Joshuto<cr>', { desc = 'open file browser' })
+local wk = require('which-key')
+wk.register({
+  ["<leader>t"] = {
+    name = "Telescope",   -- optional group name
+    t = { function()
+      local oil = require('oil')
+      oil.open()
 
-vim.keymap.set('n', '<leader>l', function() vim.o.list = not vim.o.list end,
-    { desc = 'toggle list chars' })
+      vim.defer_fn(function()
+        oil.select({ preview = true, split = 'botright' })
+      end, 50)
+    end, "Open Oil" },
+    f = { "<cmd>Telescope git_files<cr>", "Find Files (git)" },
+    g = { "<cmd>Telescope live_grep<cr>", "Grep" },
+    b = { "<cmd>Telescope buffers<cr>", "Buffers" },
+    h = { "<cmd>Telescope help_tags<cr>", "Help Tags" },
+    c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
+    p = { "<cmd>Telescope builtin<cr>", "Builtins" },
+    r = { "<cmd>Telescope registers<cr>", "Registers" },
+    s = { "<cmd>Telescope search_history<cr>", "Search History" },
+    z = { "<cmd>Telescope spell_suggest<cr>", "Spell Suggest" },
+    o = { "<cmd>Telescope oldfiles<cr>", "Old Files" },
+    m = { "<cmd>Telescope marks<cr>", "Marks" },
+    n = { "<cmd>Telescope file_browser<cr>", "File Browser" },
+    N = { "<cmd>Oil ~/Documents/notes<cr>", "Oil Notes" },
+    l = { "<cmd>Telescope lsp_document_symbols<cr>", "LSP Document Symbols" },
+    L = { "<cmd>Telescope lsp_workspace_symbols<cr>", "LSP Workspace Symbols" },
+    d = { "<cmd>Telescope lsp_document_diagnostics<cr>", "LSP Document Diagnostics" },
+    D = { "<cmd>Telescope lsp_workspace_diagnostics<cr>", "LSP Workspace Diagnostics" },
+    a = { "<cmd>Telescope lsp_code_actions<cr>", "LSP Code Actions" },
+    A = { "<cmd>Telescope lsp_range_code_actions<cr>", "LSP Range Code Actions" },
+    k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
+  },
+  ["<leader>n"] = {
+    name = "Notes", -- optional group name
+    N = { "<cmd>Notes<cr>", "Open Notes" },
+    i = { "<cmd>Oil ~/Documents/notes/inbox<cr>", "Notes inbox" },
+    n = { "<cmd>ObsidianNew<cr>", "New Note" },
+    o = { "<cmd>ObsidianOpen<cr>", "Open Obsidian" },
+  },
+})
 
-vim.keymap.set('n', '<leader>L', ':5TermExec cmd=\'lg\' direction=float<cr>')
 
-vim.keymap.set('n', '<leader>t', function() print(os.date '%H:%M') end,
-    { desc = 'show time in statusline' })
+vim.keymap.set('n', '<leader>L', function() vim.o.list = not vim.o.list end,
+  { desc = 'toggle list chars' })
+
+-- vim.keymap.set('n', '<leader>L', ':5TermExec cmd=\'lg\' direction=float<cr>')
+
+vim.keymap.set('n', '<leader>T', function() print(os.date '%H:%M') end,
+  { desc = 'show time in statusline' })
 
 vim.keymap.set('n', '<leader>n', function() vim.o.number = not vim.o.number end,
-    { desc = 'toggle line numbers' })
+  { desc = 'toggle line numbers' })
+
+vim.keymap.set('n', '<leader>l', function()
+    -- vim.cmd(":messages clear")
+    -- package.loaded['loriini.nvim'] = nil
+    require('loriini').pick()
+  end,
+  { desc = 'run loriini' })
+
+-- Teej Plugin dev helpers
+
+P = function(v)
+  print(vim.inspect(v))
+  return v
+end
+
+RELOAD = function(module)
+  return require('plenary.reload').reload_module(module)
+end
+
+R = function(name)
+  RELOAD(name)
+  return require(name)
+end
 
 -------------- Open Vimrc -----------
 vim.api.nvim_create_user_command('Vimrc',
-    function()
-        require('telescope.builtin').find_files({
-                                                  -- file_browser, live_grep, git_files
-            prompt_title = 'Vimrc Config',
-            file_ignore_patterns = { '*.pdf', '*.tex' },
-            cwd = '~/.config/nvim/'
-        })
-    end,
-    { desc = 'open Vimrc Files' }
+  function()
+    require('telescope.builtin').find_files({
+      -- file_browser, live_grep, git_files
+      prompt_title = 'Vimrc Config',
+      file_ignore_patterns = { '*.pdf', '*.tex' },
+      cwd = '~/.config/nvim/'
+    })
+  end,
+  { desc = 'Vimrc' }
 )
-vim.keymap.set('n', '<leader>V', ':Vimrc<cr>' ,{ silent = true, desc = 'toggle line numbers' })
+vim.keymap.set('n', '<leader>V', ':Vimrc<cr>', { silent = true, desc = 'Vimrc' })
+
+-------------- Pick Colorscheme -----------
+vim.keymap.set('n', '<leader>c', function()
+    local finders = require('telescope.finders')
+    require('telescope.builtin').colorscheme({
+      prompt_title = 'pick colorscheme',
+      layout_config = {
+        width = 0.3,
+        height = 10
+      },
+
+      -- finder = require('telescope.finders').new_table {
+      --   "edge", "oceanicnext", "zephyr", "tokyonight"
+      -- }
+      opts = {
+        finder = finders.new_table {
+          "edge", "oceanicNext", "zephyr", "tokyonight"
+        }
+      }
+    })
+  end,
+  { desc = 'pick colorscheme' }
+)
 
 -------------- Open Notes -----------
 vim.api.nvim_create_user_command('Notes',
-    function()
-        require('telescope.builtin').find_files({
-            prompt_title = 'open notes',
-            cwd = '~/Documents/notes/'
-        })
-    end,
-    { desc = 'open notes' }
+  function()
+    require('telescope.builtin').find_files({
+      prompt_title = 'open notes',
+      cwd = '~/Documents/notes/'
+    })
+  end,
+  { desc = 'open notes' }
 )
 
--------------- Open Notes -----------
+-------------- Open Remind -----------
 vim.api.nvim_create_user_command('Rem',
-    function()
-        require('telescope.builtin').find_files({
-            prompt_title = 'Remind',
-            cwd = '~/Documents/notes/remind/'
-        })
-    end,
-    { desc = 'open remind config' }
+  function()
+    require('telescope.builtin').find_files({
+      prompt_title = 'Remind',
+      cwd = '~/Documents/notes/remind/'
+    })
+  end,
+  { desc = 'open remind config' }
 )
 -------------- Toggle Diagnostics -----------
 
 vim.g.show_diagnosics = true
 
 vim.api.nvim_create_user_command('ToggleDiagnostics',
-    function()
-        vim.g.show_diagnostics = not vim.g.show_diagnostics
-        vim.diagnostic.config({
-            signs = vim.g.show_diagnostics,
-            underline = vim.g.show_diagnostics,
-            virtual_text = vim.g.show_diagnostics
-        })
-    end,
-    { desc = 'toggle lsp diagnostic messages' }
+  function()
+    vim.g.show_diagnostics = not vim.g.show_diagnostics
+    vim.diagnostic.config({
+      signs = vim.g.show_diagnostics,
+      underline = vim.g.show_diagnostics,
+      virtual_text = vim.g.show_diagnostics
+    })
+  end,
+  { desc = 'toggle lsp diagnostic messages' }
 )
 
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { silent = true })
-vim.keymap.set('n', '<leader>E', ':ToggleDiagnostics<cr>', { silent = true })
+vim.keymap.set('n', '<leader>E', vim.diagnostic.open_float, { desc = 'open diagnostics', silent = true })
+vim.keymap.set('n', '<leader>e', ':ToggleDiagnostics<cr>', { desc = 'toggle diagnostics', silent = true })
 
 -- (defn browse-opds [port]
 --   ((. telescope :extensions :opds :browse)
@@ -126,28 +203,25 @@ vim.keymap.set('t', '<C-i>', '<C-\\><C-n><C-W>l')
 -- Save and run on the commandline
 -- vim.keymap.set( 'n', '<leader>r', ':w<cr> <bar> :!%:p<cr>')
 
-vim.keymap.set('n', '<leader>f', ':Telescope git_files<cr>')
-vim.keymap.set('n', '<leader>g', ':Telescope live_grep<cr>')
-vim.keymap.set('n', '<leader>p', ':Telescope builtin<cr>')
 
-vim.keymap.set('n', '<leader>G', ':lua require\'gitsigns\'.toggle_signs()<cr>')
+vim.keymap.set('n', '<leader>G', ':lua require\'gitsigns\'.toggle_signs()<cr>', { desc = 'toggle git signs' })
 
 -- TODO: vim.keymap.set( 'n', '<leader>z', misc.toggle-zen-mode)
 
 vim.keymap.set('n', 'n', 'nzz')
-vim.keymap.set('n', 'N', 'Nzz')
+-- vim.keymap.set('n', 'N', 'Nzz') -- use capital N for notes instead
 
 -- toggle colorscheme (from vimrc-base)
 -- TODO: vim.keymap.set( 'n', '<leader>c', misc.toggle-light-dark)
 
 -- visual Block mode
-vim.keymap.set('n', '<leader>v', 'v<C-v>')
+vim.keymap.set('n', '<leader>v', 'v<C-v>', { desc = 'visual block mode' })
 
-vim.keymap.set('n', '<leader>q', ':bd<cr>')
+vim.keymap.set('n', '<leader>q', ':bd<cr>', { desc = 'close buffer' })
 
 -- search and replace
-vim.keymap.set('n', '<leader>s', ':%s/\\v')
-vim.keymap.set('v', '<leader>s', ':s/\\v')
+vim.keymap.set('n', '<leader>s', ':%s/\\v', { desc = 'search and replace' })
+vim.keymap.set('v', '<leader>s', ':s/\\v', { desc = 'search and replace' })
 
 -- TODO: vim.keymap.set( 'n', '<leader>S', starter.open {silent = true})
 
@@ -156,33 +230,13 @@ vim.keymap.set('v', '-', ':m \'>+1<CR>gv=gv')
 vim.keymap.set('v', '+', ':m \'<-2<CR>gv=gv')
 
 -- leader-d to remove a selection -- somehow reminds me of cmd-d in Photoshop
-vim.keymap.set('n', '<leader>d', ':nohlsearch<cr>:echom \'\'<cr>', { silent = true })
+vim.keymap.set('n', '<leader>d', ':nohlsearch<cr>:echom \'\'<cr>', { desc = 'hide selection',silent = true })
 
 -- make A and I work in visual mode as they do in visual block mode
 vim.keymap.set('v', '<C-q>', '<esc>\'<<C-q>\'>$')
 
 -- always use 'very magic' regexes
 vim.keymap.set('n', '/', '/\\v')
-
-
-vim.keymap.set('n', 'T', function()
-    require("FTerm").scratch(
-        {
-            cmd = { '/Users/kolja/dev/loriini/target/release/loriini', '-s', '18', '-r', '9' },
-            dimensions = {
-                height = 0.40,
-                width = 0.30,
-                x = 0.5,
-                y = 0.5
-            },
-            -- blend = 20,
-            on_exit = function()
-                require("FTerm").exit()
-            end,
-            border = 'none', -- none, double, rounded, shadow
-        })
-end)
-
 
 vim.keymap.set('n', '<leader>x', function()
   local current_line = vim.api.nvim_get_current_line()
@@ -191,6 +245,7 @@ vim.keymap.set('n', '<leader>x', function()
       return check == ' ' and "- [x]" or "- [ ]"
     end)
   vim.api.nvim_set_current_line(new_line)
-end)
+end, { desc = 'toggle checkboxes' })
+
 -- remove whitespace from line endings, preserver cursor posistion
 -- TODO: vim.keymap.set( 'n', :<leader><space>, [[:call Preserve('%s/\s\+$//e')<cr>]])

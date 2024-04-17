@@ -73,9 +73,13 @@ local provider = {
     range = true,
 }
 
+
 local on_attach = function(client, bufnr)
 
     local opts = { buffer = bufnr, remap = false }
+    local function _opts(desc)
+      return { buffer = bufnr, remap = false, desc = desc }
+    end
 
     vim.keymap.set("n", "gD", function() vim.lsp.buf.declaration() end, opts)
     vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
@@ -83,13 +87,13 @@ local on_attach = function(client, bufnr)
     -- vim.keymap.set("i", "<C-i>", function() vim.lsp.buf.hover() end, opts) -- messes with tab somehow
     vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
     vim.keymap.set("i", "<C-k>", function() vim.lsp.buf.signature_help() end, opts)
-    vim.keymap.set("n", "<leader>w", function() vim.lsp.buf.workspace_symbol() end, opts)
-    vim.keymap.set("n", "<leader>D", function() vim.diagnostic.open_float() end, opts)
+    vim.keymap.set("n", "<leader>w", function() vim.lsp.buf.workspace_symbol() end, _opts("workspace symbol"))
+    vim.keymap.set("n", "<leader>D", function() vim.diagnostic.open_float() end, _opts("open diagnostics"))
     vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
     vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
-    vim.keymap.set("n", "<leader>a", function() vim.lsp.buf.code_action() end, opts)
-    vim.keymap.set("n", "<leader>R", function() vim.lsp.buf.references() end, opts)
-    vim.keymap.set("n", "<leader>r", function() vim.lsp.buf.rename() end, opts)
+    vim.keymap.set("n", "<leader>a", function() vim.lsp.buf.code_action() end, _opts("code action"))
+    vim.keymap.set("n", "<leader>R", function() vim.lsp.buf.references() end, _opts("references"))
+    vim.keymap.set("n", "<leader>r", function() vim.lsp.buf.rename() end, _opts("rename"))
     vim.keymap.set("n", "==", function() vim.lsp.buf.format() end, opts)
 
     -- Hacky workaround. Hopefully remove soon.

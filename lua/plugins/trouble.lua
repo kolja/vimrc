@@ -12,7 +12,8 @@ end
 
 return {
     'folke/trouble.nvim',
-    dependencies = 'kyazdani42/nvim-web-devicons',
+    -- enable = false,
+    dependencies = {'kyazdani42/nvim-web-devicons', 'folke/lsp-colors.nvim'},
     config = function()
         signs_workaround() -- there seems to be a bug that makes this workaround necessary
         require('trouble').setup({

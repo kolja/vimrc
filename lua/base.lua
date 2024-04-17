@@ -59,6 +59,7 @@ vim.o.laststatus = 3
 vim.o.background = "dark"
 
 vim.o.shell = "/bin/zsh"
+
 -------------- bootstrap Lazy.nvim --------------
 --
 

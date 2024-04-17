@@ -4,6 +4,9 @@ return {
         require('nvim-treesitter.configs').setup {
             ensure_installed = {
                 "clojure",
+                "python",
+                "markdown",
+                "markdown_inline",
                 "fennel",
                 "javascript",
                 "typescript",
