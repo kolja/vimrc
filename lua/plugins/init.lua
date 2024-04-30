@@ -108,6 +108,7 @@ return {
     'stevearc/oil.nvim',
     opts = {
       keymaps = {
+        ["~"] = function () require("oil").open("~") end,
         ["q"] = "actions.close",
         ["<"] = "actions.parent",
         [">"] = "actions.select",

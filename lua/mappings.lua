@@ -1,9 +1,34 @@
 
 local wk = require('which-key')
+local notes = vim.env.NOTES
 wk.register({
+  ["<leader><leader>"] = {
+    name = "Shortcut",
+    t = { function ()
+      local is_git = vim.fn.systemlist('git rev-parse --is-inside-work-tree')[1] == 'true'
+      if (is_git) then
+        vim.cmd('Telescope git_files')
+      else
+        local oil = require('oil')
+        oil.open()
+
+        vim.defer_fn(function()
+          oil.select({ preview = true, split = 'botright' })
+        end, 50)
+      end
+    end, "File Picker" },
+    n = { function ()
+      local oil = require('oil')
+      local inbox = vim.env.NOTES.."/inbox"
+      oil.open(inbox)
+      vim.defer_fn(function()
+        oil.select({ preview = true, split = 'botright' })
+      end, 50)
+    end, "Note Picker" }
+  },
   ["<leader>t"] = {
-    name = "Telescope",   -- optional group name
-    t = { function()
+    name = "Telescope",
+    T = { function()
       local oil = require('oil')
       oil.open()
 
@@ -11,7 +36,7 @@ wk.register({
         oil.select({ preview = true, split = 'botright' })
       end, 50)
     end, "Open Oil" },
-    f = { "<cmd>Telescope git_files<cr>", "Find Files (git)" },
+    t = { "<cmd>Telescope git_files<cr>", "Find Files (git)" },
     g = { "<cmd>Telescope live_grep<cr>", "Grep" },
     b = { "<cmd>Telescope buffers<cr>", "Buffers" },
     h = { "<cmd>Telescope help_tags<cr>", "Help Tags" },
@@ -22,7 +47,7 @@ wk.register({
     z = { "<cmd>Telescope spell_suggest<cr>", "Spell Suggest" },
     o = { "<cmd>Telescope oldfiles<cr>", "Old Files" },
     m = { "<cmd>Telescope marks<cr>", "Marks" },
-    n = { "<cmd>Oil ~/Documents/notes<cr>", "Oil Notes" },
+    n = { "<cmd>Oil "..notes.."<cr>", "Oil Notes" },
     l = { "<cmd>Telescope lsp_document_symbols<cr>", "LSP Document Symbols" },
     L = { "<cmd>Telescope lsp_workspace_symbols<cr>", "LSP Workspace Symbols" },
     d = { "<cmd>Telescope lsp_document_diagnostics<cr>", "LSP Document Diagnostics" },
@@ -34,7 +59,7 @@ wk.register({
   ["<leader>n"] = {
     name = "Notes", -- optional group name
     N = { "<cmd>Notes<cr>", "Open Notes" },
-    n = { "<cmd>Oil ~/Documents/notes/inbox<cr>", "Notes inbox" },
+    n = { "<cmd>Oil "..notes.."/inbox<cr>", "Notes inbox" },
     a = { "<cmd>ObsidianNew<cr>", "add Note" },
     s = { "<cmd>ObsidianSearch<cr>", "Grep Notes" },
     r = { "<cmd>ObsidianRename<cr>", "Rename Note" },
@@ -121,7 +146,7 @@ vim.api.nvim_create_user_command('Notes',
   function()
     require('telescope.builtin').find_files({
       prompt_title = 'open notes',
-      cwd = '~/Documents/notes/'
+      cwd = notes
     })
   end,
   { desc = 'open notes' }
@@ -132,7 +157,7 @@ vim.api.nvim_create_user_command('Rem',
   function()
     require('telescope.builtin').find_files({
       prompt_title = 'Remind',
-      cwd = '~/Documents/notes/remind/'
+      cwd = notes..'/remind/'
     })
   end,
   { desc = 'open remind config' }
@@ -153,8 +178,8 @@ vim.api.nvim_create_user_command('ToggleDiagnostics',
   { desc = 'toggle lsp diagnostic messages' }
 )
 
-vim.keymap.set('n', '<leader>E', vim.diagnostic.open_float, { desc = 'open diagnostics', silent = true })
-vim.keymap.set('n', '<leader>e', ':ToggleDiagnostics<cr>', { desc = 'toggle diagnostics', silent = true })
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'open diagnostics', silent = true })
+vim.keymap.set('n', '<leader>E', ':ToggleDiagnostics<cr>', { desc = 'toggle diagnostics', silent = true })
 
 -- (defn browse-opds [port]
 --   ((. telescope :extensions :opds :browse)
