@@ -1,6 +1,14 @@
+local function openOil (dir) -- TODO: return anonymous function to be called by keymap
+      local oil = require('oil')
+      oil.open(dir)
+      vim.defer_fn(function()
+        oil.open_preview({ split = 'botright' })
+      end, 50)
+    end
 
 local wk = require('which-key')
 local notes = vim.env.NOTES
+
 wk.register({
   ["<leader><leader>"] = {
     name = "Shortcut",
@@ -9,45 +17,34 @@ wk.register({
       if (is_git) then
         vim.cmd('Telescope git_files')
       else
-        local oil = require('oil')
-        oil.open()
-
-        vim.defer_fn(function()
-          oil.select({ preview = true, split = 'botright' })
-        end, 50)
+        openOil()
       end
     end, "File Picker" },
+    c = { function ()
+      require('CopilotChat').toggle()
+    end, "Copilot Chat" },
     n = { function ()
-      local oil = require('oil')
-      local inbox = vim.env.NOTES.."/inbox"
-      oil.open(inbox)
-      vim.defer_fn(function()
-        oil.select({ preview = true, split = 'botright' })
-      end, 50)
-    end, "Note Picker" }
+      openOil(notes.."/inbox")
+    end, "Note Picker (Oil/Inbox)" },
+    r = { function ()
+      openOil(notes.."/remind")
+    end, "Remind (Oil/Inbox)" }
   },
   ["<leader>t"] = {
     name = "Telescope",
-    T = { function()
-      local oil = require('oil')
-      oil.open()
-
-      vim.defer_fn(function()
-        oil.select({ preview = true, split = 'botright' })
-      end, 50)
-    end, "Open Oil" },
+    T = { openOil, "Open Oil" },
     t = { "<cmd>Telescope git_files<cr>", "Find Files (git)" },
     g = { "<cmd>Telescope live_grep<cr>", "Grep" },
     b = { "<cmd>Telescope buffers<cr>", "Buffers" },
     h = { "<cmd>Telescope help_tags<cr>", "Help Tags" },
     c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
     p = { "<cmd>Telescope builtin<cr>", "Builtins" },
-    r = { "<cmd>Telescope registers<cr>", "Registers" },
+    r = { "<cmd>Rem<cr>", "Remind" },
     s = { "<cmd>Telescope search_history<cr>", "Search History" },
     z = { "<cmd>Telescope spell_suggest<cr>", "Spell Suggest" },
     o = { "<cmd>Telescope oldfiles<cr>", "Old Files" },
     m = { "<cmd>Telescope marks<cr>", "Marks" },
-    n = { "<cmd>Oil "..notes.."<cr>", "Oil Notes" },
+    n = { function () openOil(notes) end, "Note Picker (Oil)" },
     l = { "<cmd>Telescope lsp_document_symbols<cr>", "LSP Document Symbols" },
     L = { "<cmd>Telescope lsp_workspace_symbols<cr>", "LSP Workspace Symbols" },
     d = { "<cmd>Telescope lsp_document_diagnostics<cr>", "LSP Document Diagnostics" },
@@ -59,7 +56,7 @@ wk.register({
   ["<leader>n"] = {
     name = "Notes", -- optional group name
     N = { "<cmd>Notes<cr>", "Open Notes" },
-    n = { "<cmd>Oil "..notes.."/inbox<cr>", "Notes inbox" },
+    n = { function () openOil(notes) end, "Note Picker (Oil)" },
     a = { "<cmd>ObsidianNew<cr>", "add Note" },
     s = { "<cmd>ObsidianSearch<cr>", "Grep Notes" },
     r = { "<cmd>ObsidianRename<cr>", "Rename Note" },
@@ -73,7 +70,13 @@ wk.register({
 vim.keymap.set('n', '<leader>L', function() vim.o.list = not vim.o.list end,
   { desc = 'toggle list chars' })
 
--- vim.keymap.set('n', '<leader>L', ':5TermExec cmd=\'lg\' direction=float<cr>')
+vim.keymap.set('n', '<leader><space>',
+    function()
+      local save_cursor = vim.fn.getpos(".")
+      pcall(function() vim.cmd [[%s/\s\+$//e]] end)
+      vim.fn.setpos(".", save_cursor)
+    end,
+  { desc = 'remove trailing whitespace' })
 
 vim.keymap.set('n', '<leader>T', function() print(os.date '%H:%M') end,
   { desc = 'show time in statusline' })
@@ -82,8 +85,6 @@ vim.keymap.set('n', '<leader>n', function() vim.o.number = not vim.o.number end,
   { desc = 'toggle line numbers' })
 
 vim.keymap.set('n', '<leader>l', function()
-    -- vim.cmd(":messages clear")
-    -- package.loaded['loriini.nvim'] = nil
     require('loriini').pick()
   end,
   { desc = 'run loriini' })
@@ -176,6 +177,24 @@ vim.api.nvim_create_user_command('ToggleDiagnostics',
     })
   end,
   { desc = 'toggle lsp diagnostic messages' }
+)
+
+vim.api.nvim_create_user_command('Pdf',
+  function()
+    local file_path = vim.fn.expand('%:p')
+    local title = vim.fn.expand('%:t:r')
+    vim.fn.setenv('VAULT_PATH', '/Users/Kolja/Documents/notes')
+    vim.fn.setenv('TYPST_PATH', '/Users/Kolja/Documents/typst')
+    vim.fn.setenv('TITLE', title)
+    vim.fn.setenv('FILE', file_path)
+    local result = os.execute('/usr/local/bin/typst-filter -o/Applications/Skim.app')
+    if result == 0 then
+      print("PDF generation succeeded!")
+    else
+      print("PDF generation failed!")
+    end
+  end,
+  { desc = 'Generate Pdf' }
 )
 
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'open diagnostics', silent = true })
@@ -275,5 +294,3 @@ vim.keymap.set('n', '<leader>x', function()
   vim.api.nvim_set_current_line(new_line)
 end, { desc = 'toggle checkboxes' })
 
--- remove whitespace from line endings, preserver cursor posistion
--- TODO: vim.keymap.set( 'n', :<leader><space>, [[:call Preserve('%s/\s\+$//e')<cr>]])

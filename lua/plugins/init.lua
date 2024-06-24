@@ -9,7 +9,6 @@ return {
   },
   {
     'akinsho/bufferline.nvim',
-    version = '*',
     dependencies = 'kyazdani42/nvim-web-devicons',
     config = true
   },
@@ -29,11 +28,6 @@ return {
     'karb94/neoscroll.nvim',
     config = true
   },
-  {
-    'numToStr/Comment.nvim',
-    config = true
-  },
-
   {
     'lewis6991/gitsigns.nvim',
     config = true
@@ -116,12 +110,25 @@ return {
       },
       preview = {
         max_width = { 30, 0.3 },
-      }
+      },
+      delete_to_trash = true,
+      skip_confirm_for_simple_edits = true,
     },
     -- Optional dependencies
     dependencies = { "nvim-tree/nvim-web-devicons" },
   },
-  { 'github/copilot.vim' },
+  { 'github/copilot.vim' }, -- zbirenbaurm/copilot.vim what about it?
+  {
+    'CopilotC-Nvim/CopilotChat.nvim',
+    branch = 'canary',
+    dependencies = {
+      { "github/copilot.vim" },
+      { "nvim-lua/plenary.nvim" },
+    },
+    opts = {
+      debug = true,
+    }
+  },
   {
     "NeogitOrg/neogit",
     dependencies = {
@@ -133,12 +140,10 @@ return {
   },
   {
     'kolja/loriini.nvim',
-    cmd = 'Loriini',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    dev = true,
     config = function()
       require('loriini').setup({
-        bin = "/Users/kolja/dev/loriini/target/release/loriini",
+        bin = "/opt/homebrew/bin/loriini",
       })
     end
   }

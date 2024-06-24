@@ -102,7 +102,7 @@ local on_attach = function(client, bufnr)
     end
 end
 
-local ensure_installed = { "marksman", "lua_ls", "tsserver", "rust_analyzer", "omnisharp_mono" }
+local ensure_installed = { "lua_ls", "tsserver", "rust_analyzer", "omnisharp_mono" }
 
 return {
 
@@ -148,6 +148,11 @@ return {
             }
 
             lspconfig.tailwindcss.setup {}
+
+            lspconfig.markdown_oxide.setup {
+                capabilities = capabilities,
+                on_attach = on_attach
+            }
 
             lspconfig.emmet_ls.setup({
               -- on_attach = on_attach,
