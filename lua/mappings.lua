@@ -1,15 +1,55 @@
-local function openOil (dir) -- TODO: return anonymous function to be called by keymap
-      local oil = require('oil')
-      oil.open(dir)
-      vim.defer_fn(function()
-        oil.open_preview({ split = 'botright' })
-      end, 50)
-    end
+local M = {}
+
+local function openOil (dir)
+  local oil = require('oil')
+  return function ()
+    oil.open(dir)
+  end
+end
+
+M.openOil = openOil
 
 local wk = require('which-key')
 local notes = vim.env.NOTES
 
 wk.register({
+  ["<leader>"] = {
+    L = { function() vim.o.list = not vim.o.list end, 'toggle list chars' },
+    ["<space>"] = { function()
+                      local save_cursor = vim.fn.getpos(".")
+                      pcall(function() vim.cmd [[%s/\s\+$//e]] end)
+                      vim.fn.setpos(".", save_cursor)
+                    end, "remove trailing whitespace" },
+
+    T = { function() print(os.date '%H:%M') end, 'show time in statusline' },
+    N = { function() vim.o.number = not vim.o.number end, 'toggle line numbers' },
+    l = { function() require('loriini').pick() end, 'run loriini' },
+    V = {":Vimrc<cr>", "open Vimrc" },
+    c = { function()
+              -- local finders = require('telescope.finders')
+              require('telescope.builtin').colorscheme({
+                prompt_title = 'pick colorscheme',
+                layout_config = {
+                  width = 0.3,
+                  height = 10
+                },
+                finder = require('telescope.finders').new_table {
+                  "onedark", "OceanicNext", "OceanicNextLight", "tokyonight", "zephyr", "falcon", "edge"
+                }
+              })
+          end, 'pick colorscheme' },
+
+       e = { function () vim.diagnostic.open_float() end, "open diagnostics" },
+       E = {':ToggleDiagnostics<cr>', 'toggle diagnostics' },
+       f = { openOil(), "Open Oil" },
+  },
+
+  ["<leader>g"] = {
+    name = "Git",
+    g = { "<cmd>Neogit<cr>", "Neogit" },
+    c = { "<cmd>Neogit commit<cr>", "Commit" },
+  },
+
   ["<leader><leader>"] = {
     name = "Shortcut",
     t = { function ()
@@ -17,22 +57,18 @@ wk.register({
       if (is_git) then
         vim.cmd('Telescope git_files')
       else
-        openOil()
+        openOil()()
       end
     end, "File Picker" },
     c = { function ()
       require('CopilotChat').toggle()
     end, "Copilot Chat" },
-    n = { function ()
-      openOil(notes.."/inbox")
-    end, "Note Picker (Oil/Inbox)" },
-    r = { function ()
-      openOil(notes.."/remind")
-    end, "Remind (Oil/Inbox)" }
+    n = { openOil(notes.."/inbox"), "Note Picker (Oil/Inbox)" },
+    r = { openOil(notes.."/remind"), "Remind (Oil/Inbox)" }
   },
   ["<leader>t"] = {
     name = "Telescope",
-    T = { openOil, "Open Oil" },
+    T = { openOil(), "Open Oil" },
     t = { "<cmd>Telescope git_files<cr>", "Find Files (git)" },
     g = { "<cmd>Telescope live_grep<cr>", "Grep" },
     b = { "<cmd>Telescope buffers<cr>", "Buffers" },
@@ -44,7 +80,6 @@ wk.register({
     z = { "<cmd>Telescope spell_suggest<cr>", "Spell Suggest" },
     o = { "<cmd>Telescope oldfiles<cr>", "Old Files" },
     m = { "<cmd>Telescope marks<cr>", "Marks" },
-    n = { function () openOil(notes) end, "Note Picker (Oil)" },
     l = { "<cmd>Telescope lsp_document_symbols<cr>", "LSP Document Symbols" },
     L = { "<cmd>Telescope lsp_workspace_symbols<cr>", "LSP Workspace Symbols" },
     d = { "<cmd>Telescope lsp_document_diagnostics<cr>", "LSP Document Diagnostics" },
@@ -56,7 +91,7 @@ wk.register({
   ["<leader>n"] = {
     name = "Notes", -- optional group name
     N = { "<cmd>Notes<cr>", "Open Notes" },
-    n = { function () openOil(notes) end, "Note Picker (Oil)" },
+    n = { openOil(notes), "Note Picker (Oil)" },
     a = { "<cmd>ObsidianNew<cr>", "add Note" },
     s = { "<cmd>ObsidianSearch<cr>", "Grep Notes" },
     r = { "<cmd>ObsidianRename<cr>", "Rename Note" },
@@ -67,29 +102,8 @@ wk.register({
   },
 })
 
-vim.keymap.set('n', '<leader>L', function() vim.o.list = not vim.o.list end,
-  { desc = 'toggle list chars' })
 
-vim.keymap.set('n', '<leader><space>',
-    function()
-      local save_cursor = vim.fn.getpos(".")
-      pcall(function() vim.cmd [[%s/\s\+$//e]] end)
-      vim.fn.setpos(".", save_cursor)
-    end,
-  { desc = 'remove trailing whitespace' })
-
-vim.keymap.set('n', '<leader>T', function() print(os.date '%H:%M') end,
-  { desc = 'show time in statusline' })
-
-vim.keymap.set('n', '<leader>n', function() vim.o.number = not vim.o.number end,
-  { desc = 'toggle line numbers' })
-
-vim.keymap.set('n', '<leader>l', function()
-    require('loriini').pick()
-  end,
-  { desc = 'run loriini' })
-
--- Teej Plugin dev helpers
+------------- Teej Plugin dev helpers ------------
 
 P = function(v)
   print(vim.inspect(v))
@@ -116,30 +130,6 @@ vim.api.nvim_create_user_command('Vimrc',
     })
   end,
   { desc = 'Vimrc' }
-)
-vim.keymap.set('n', '<leader>V', ':Vimrc<cr>', { silent = true, desc = 'Vimrc' })
-
--------------- Pick Colorscheme -----------
-vim.keymap.set('n', '<leader>c', function()
-    local finders = require('telescope.finders')
-    require('telescope.builtin').colorscheme({
-      prompt_title = 'pick colorscheme',
-      layout_config = {
-        width = 0.3,
-        height = 10
-      },
-
-      -- finder = require('telescope.finders').new_table {
-      --   "edge", "oceanicnext", "zephyr", "tokyonight"
-      -- }
-      opts = {
-        finder = finders.new_table {
-          "edge", "oceanicNext", "zephyr", "tokyonight"
-        }
-      }
-    })
-  end,
-  { desc = 'pick colorscheme' }
 )
 
 -------------- Open Notes -----------
@@ -182,23 +172,35 @@ vim.api.nvim_create_user_command('ToggleDiagnostics',
 vim.api.nvim_create_user_command('Pdf',
   function()
     local file_path = vim.fn.expand('%:p')
-    local title = vim.fn.expand('%:t:r')
-    vim.fn.setenv('VAULT_PATH', '/Users/Kolja/Documents/notes')
-    vim.fn.setenv('TYPST_PATH', '/Users/Kolja/Documents/typst')
-    vim.fn.setenv('TITLE', title)
-    vim.fn.setenv('FILE', file_path)
-    local result = os.execute('/usr/local/bin/typst-filter -o/Applications/Skim.app')
-    if result == 0 then
-      print("PDF generation succeeded!")
-    else
-      print("PDF generation failed!")
+    local command = {
+        '/usr/local/bin/md2typst',
+        file_path,
+        '-o/Applications/Skim.app',
+    }
+    local out = {}
+    local function aggregate(_, data, _)
+      for _, line in ipairs(data) do
+        if line ~= "" then
+          table.insert(out, line)
+        end
+      end
     end
+    vim.fn.jobstart(
+      command,
+      {
+        env = {
+          TYPST_ROOT = '/Users/kolja/Documents/typst'
+        },
+        on_stderr = aggregate,
+        on_stdout = aggregate,
+        on_exit = function(id, exitcode, event)
+          vim.print(table.concat(out, "\n"))
+        end,
+      })
   end,
   { desc = 'Generate Pdf' }
 )
 
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'open diagnostics', silent = true })
-vim.keymap.set('n', '<leader>E', ':ToggleDiagnostics<cr>', { desc = 'toggle diagnostics', silent = true })
 
 -- (defn browse-opds [port]
 --   ((. telescope :extensions :opds :browse)
@@ -294,3 +296,4 @@ vim.keymap.set('n', '<leader>x', function()
   vim.api.nvim_set_current_line(new_line)
 end, { desc = 'toggle checkboxes' })
 
+return M

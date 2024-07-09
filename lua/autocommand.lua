@@ -11,24 +11,21 @@ local group = vim.api.nvim_create_augroup("the_group", {clear = false})
 --     end
 -- })
 
-vim.api.nvim_create_autocmd("User", {
-    pattern = "VeryLazy",
-    callback = function()
-      local pickerdir = vim.env.NVIM_PICKER
-      if pickerdir then
-        print(pickerdir)
-        vim.cmd('cd ' .. pickerdir)
-        vim.api.nvim_set_current_dir(pickerdir)
-        local oil = require('oil')
-        vim.defer_fn(function()
-          oil.open(pickerdir)
-        end, 1)
-        vim.defer_fn(function()
-          oil.open_preview({ split = 'botright' })
-        end, 150)
-      end
-    end
-  })
+-- vim.api.nvim_create_autocmd("User", {
+--   pattern = "OilEnter",
+--   callback = vim.schedule_wrap(function(args)
+--     local oil = require("oil")
+--     local util = require("oil.util")
+--     if vim.api.nvim_get_current_buf() == args.data.buf and oil.get_cursor_entry() then
+--       local id = util.get_preview_win()
+--       if id then
+--         vim.api.nvim_win_close(id, true)
+--         return
+--       end
+--       oil.open_preview({split = 'botright'})
+--     end
+--   end),
+-- })
 
 -- Highlight on Yank
 vim.api.nvim_create_autocmd( "TextYankPost", {

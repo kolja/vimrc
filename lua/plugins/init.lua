@@ -98,25 +98,6 @@ return {
     "julienvincent/nvim-paredit",
     config = true
   },
-  {
-    'stevearc/oil.nvim',
-    opts = {
-      keymaps = {
-        ["~"] = function () require("oil").open("~") end,
-        ["q"] = "actions.close",
-        ["<"] = "actions.parent",
-        [">"] = "actions.select",
-        ["?"] = "actions.show_help",
-      },
-      preview = {
-        max_width = { 30, 0.3 },
-      },
-      delete_to_trash = true,
-      skip_confirm_for_simple_edits = true,
-    },
-    -- Optional dependencies
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-  },
   { 'github/copilot.vim' }, -- zbirenbaurm/copilot.vim what about it?
   {
     'CopilotC-Nvim/CopilotChat.nvim',

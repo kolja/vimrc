@@ -63,11 +63,11 @@ return {
     end
   },
 
+  { 'glepnir/zephyr-nvim',      lazy = true },
+  { 'fenetikm/falcon',          lazy = true },
+  { 'folke/tokyonight.nvim',    lazy = true }
 }
 
-  -- -- { 'glepnir/zephyr-nvim',      lazy = true },
-  -- -- { 'fenetikm/falcon',          lazy = true },
-  -- -- { 'folke/tokyonight.nvim',    lazy = true },
   -- vim.cmd('colorscheme falcon')
   -- vim.cmd('colorscheme edge')
   -- vim.cmd('colorscheme zephyr')
